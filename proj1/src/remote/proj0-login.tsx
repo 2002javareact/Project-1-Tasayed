@@ -1,28 +1,30 @@
-import { User } from "../../models/User";
-import { BadCredentialsError } from "../../errors/BadCredentialsError";
-import { InternalServerError } from "../../errors/InternalServerError";
+import {User} from '../../../project-0-TaSayed/src/JS/models/User'
+import { InternalServerError } from "../errors/internal-server";
+import { BadCredentialsError } from "../errors/bad-credentials-error";;
 
 
 
-export async function webflicksLogin(username: string, password: string): Promise<User> {
+
+export async function proj0Login(username: string, password: string): Promise<User> {
     let credentials = {
         username,
         password
     }
     try {
 
-
-        let response = await fetch('http://ec2-52-91-202-52.compute-1.amazonaws.com:2002/login', {
+        //ec2: 
+        let response:any = "attempt?"
+        response = await fetch('http://localhost:2002/login', {
             method: 'POST',
+            mode: "cors",
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
-            },
+            },  
             body: JSON.stringify(credentials)
-
-        })
-        console.log(response);
-
+        });
+        
+        response = "unsuccess?"
         if(response.status === 404){
             throw new BadCredentialsError()
         }
@@ -32,6 +34,8 @@ export async function webflicksLogin(username: string, password: string): Promis
         if(e.status === 404){
             throw e
         } else{
+            console.log(e.message);
+            
             throw new InternalServerError()
         }
     }
